@@ -16,12 +16,20 @@
     <div class="heading"><p class="eyebrow">DUE OSCILLAZIONI. UNA TRACCIA.</p><h1>Memoria <em>oscillante</em><span>.</span></h1><p class="intro">Un equilibrio di frequenze, fase e tempo.<br>Ogni movimento lascia una memoria.</p></div>
     <div class="workspace">
       <section class="drawing" aria-label="Disegno armonografico"><div class="canvas-top"><span><i></i> TRACCIA IN EVOLUZIONE</span><span>800 × 800 PX</span></div><div id="canvas-host"></div><div class="canvas-bottom"><span>X ↔ Y / OSCILLAZIONI SMORZATE</span><span>IL TEMPO DISEGNA.</span></div></section>
-      <aside aria-label="Parametri della traiettoria"><div class="panel-title"><span>Parametri</span><span class="index">01—03</span></div><p class="panel-intro">Modifica il movimento.<br>La memoria rimane.</p>
-        <div class="control"><label for="ratio"><span class="number">01</span>Rapporto tra frequenze</label><output for="ratio" id="ratio-value">1.503</output><input id="ratio" type="range" min="0.5" max="3" step="0.001" value="1.503"><div class="range-labels"><span>0.500</span><span>3.000</span></div></div>
-        <div class="control"><label for="phase"><span class="number">02</span>Differenza di fase</label><output for="phase" id="phase-value">90°</output><input id="phase" type="range" min="0" max="360" step="1" value="90"><div class="range-labels"><span>0°</span><span>360°</span></div></div>
-        <div class="control"><label for="damping"><span class="number">03</span>Smorzamento</label><output for="damping" id="damping-value">0.008</output><input id="damping" type="range" min="0" max="0.04" step="0.001" value="0.008"><div class="range-labels"><span>0.000</span><span>0.040</span></div></div>
+      <aside aria-label="Parametri della traiettoria">
+        <div class="panel-title"><span>Parole in movimento</span><span class="index">01—08</span></div>
+        <div class="word-control"><label for="phrase">Una parola, una frase</label><input id="phrase" type="text" maxlength="240" placeholder="Scrivi qualcosa…" autocomplete="off" spellcheck="false"><p id="phrase-status" role="status">Ogni lettera bilancia gli otto parametri.</p></div>
+        <div class="parameter-grid"><div class="control"><label for="frequencyX"><span class="number">01</span>Frequenza X</label><output for="frequencyX" id="frequencyX-value">0.320 Hz</output><input id="frequencyX" type="range" min="0.1" max="0.8" step="0.001" value="0.32"></div>
+<div class="control"><label for="frequencyY"><span class="number">02</span>Frequenza Y</label><output for="frequencyY" id="frequencyY-value">0.481 Hz</output><input id="frequencyY" type="range" min="0.1" max="1.2" step="0.001" value="0.481"></div>
+<div class="control"><label for="amplitudeX"><span class="number">03</span>Ampiezza X</label><output for="amplitudeX" id="amplitudeX-value">1.000</output><input id="amplitudeX" type="range" min="0.2" max="1" step="0.001" value="1"></div>
+<div class="control"><label for="amplitudeY"><span class="number">04</span>Ampiezza Y</label><output for="amplitudeY" id="amplitudeY-value">1.000</output><input id="amplitudeY" type="range" min="0.2" max="1" step="0.001" value="1"></div>
+<div class="control"><label for="phaseX"><span class="number">05</span>Fase X</label><output for="phaseX" id="phaseX-value">0°</output><input id="phaseX" type="range" min="0" max="360" step="1" value="0"></div>
+<div class="control"><label for="phaseY"><span class="number">06</span>Fase Y</label><output for="phaseY" id="phaseY-value">90°</output><input id="phaseY" type="range" min="0" max="360" step="1" value="90"></div>
+<div class="control"><label for="dampingX"><span class="number">07</span>Smorzamento X</label><output for="dampingX" id="dampingX-value">0.008</output><input id="dampingX" type="range" min="0" max="0.04" step="0.001" value="0.008"></div>
+<div class="control"><label for="dampingY"><span class="number">08</span>Smorzamento Y</label><output for="dampingY" id="dampingY-value">0.008</output><input id="dampingY" type="range" min="0" max="0.04" step="0.001" value="0.008"></div>
+</div>
         <div class="actions"><button id="export" type="button">Esporta PNG <span aria-hidden="true">↗</span></button><button id="reset" type="button">Reset <span aria-hidden="true">↺</span></button></div>
-        <p class="note">I parametri cambiano il futuro della linea.<br>Reset apre un nuovo inizio.</p>
+        <p class="note">Testo e cursori cambiano il futuro della linea.<br>Reset riparte con i parametri attuali.</p>
       </aside>
     </div>
   </main>

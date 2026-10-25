@@ -5,33 +5,69 @@
 const TAU = Math.PI * 2;
 const STEP = 1 / 480; // Fixed simulation step, regardless of display refresh rate.
 const SPEED = 4;
-const BASE_FREQUENCY = 0.32;
-const target = { ratio: 1.503, phase: Math.PI / 2, damping: 0.008 };
+const DEFAULTS = Object.freeze({ frequencyX: 0.32, frequencyY: 0.481,
+  amplitudeX: 1, amplitudeY: 1, phaseX: 0, phaseY: 90,
+  dampingX: 0.008, dampingY: 0.008 });
+const target = { ...DEFAULTS };
+const parameterNames = Object.keys(DEFAULTS);
 let oscillator;
 let accumulator = 0;
 let previous;
 let artwork;
 
 function createOscillator(parameters) {
-  return { angleX: 0, angleY: 0, phase: parameters.phase,
-    ratio: parameters.ratio, damping: parameters.damping, decay: 0 };
+  return { ...parameters, angleX: 0, angleY: 0, decayX: 0, decayY: 0 };
 }
 
 function advanceOscillator(state, parameters, dt) {
-  // Smooth over ~0.8 simulation seconds, preserving position on abrupt input.
-  const blend = 1 - Math.exp(-dt / 0.8);
-  state.ratio += (parameters.ratio - state.ratio) * blend;
-  state.phase += (parameters.phase - state.phase) * blend;
-  state.damping += (parameters.damping - state.damping) * blend;
-  state.angleX = (state.angleX + TAU * BASE_FREQUENCY * dt) % TAU;
-  state.angleY = (state.angleY + TAU * BASE_FREQUENCY * state.ratio * dt) % TAU;
-  state.decay += state.damping * dt;
+  // Integrate phase and decay; changing frequency never jumps the position.
+  const blend = 1 - Math.exp(-dt / 1.2);
+  for (const name of parameterNames) {
+    state[name] += (parameters[name] - state[name]) * blend;
+  }
+  for (const axis of ['X', 'Y']) {
+    state['angle' + axis] = (state['angle' + axis] +
+      TAU * state['frequency' + axis] * dt) % TAU;
+    state['decay' + axis] += state['damping' + axis] * dt;
+  }
 }
 
 function oscillatorPosition(state) {
-  const amplitude = 350 * Math.exp(-state.decay);
-  return { x: 400 + amplitude * Math.sin(state.angleX),
-    y: 400 + amplitude * Math.sin(state.angleY + state.phase) };
+  const coordinate = axis => 400 + 350 * state['amplitude' + axis] *
+    Math.exp(-state['decay' + axis]) *
+    Math.sin(state['angle' + axis] + state['phase' + axis] * Math.PI / 180);
+  return { x: coordinate('X'), y: coordinate('Y') };
+}
+
+// Each Unicode character contributes to every parameter. Position changes the
+// weight: anagrams differ too. No randomness, network, or generated AI content.
+function parametersFromText(text) {
+  const letters = Array.from(text.normalize('NFC'));
+  if (!letters.length) return { ...DEFAULTS };
+  const result = {};
+  parameterNames.forEach((name, channel) => {
+    let balance = 0;
+    letters.forEach((letter, index) => {
+      balance += Math.sin(letter.codePointAt(0) * (channel + 1) * 0.173 +
+        (index + 1) * (channel + 2) * 0.619);
+    });
+    const normalized = 0.5 + 0.5 * Math.tanh(balance / Math.sqrt(letters.length));
+    const input = document.getElementById(name);
+    const min = Number(input.min);
+    const step = Number(input.step);
+    result[name] = Math.max(min, Math.min(Number(input.max),
+      min + Math.round(normalized * (Number(input.max) - min) / step) * step));
+  });
+  return result;
+}
+
+function updateControls() {
+  for (const name of parameterNames) {
+    document.getElementById(name).value = target[name];
+    const value = target[name];
+    document.getElementById(name + '-value').value = name.startsWith('phase')
+      ? `${Math.round(value)}°` : value.toFixed(3) + (name.startsWith('frequency') ? ' Hz' : '');
+  }
 }
 
 function resetDrawing() {
@@ -52,18 +88,19 @@ function setup() {
   strokeWeight(0.55);
   noFill();
   resetDrawing();
-  const controls = [
-    ['ratio', value => value.toFixed(3), value => value],
-    ['phase', value => `${value}°`, value => value * Math.PI / 180],
-    ['damping', value => value.toFixed(3), value => value]
-  ];
-  controls.forEach(([name, format, convert]) => {
-    const input = document.getElementById(name);
-    input.addEventListener('input', () => {
-      const value = Number(input.value);
-      target[name] = convert(value);
-      document.getElementById(`${name}-value`).value = format(value);
+  parameterNames.forEach(name => {
+    document.getElementById(name).addEventListener('input', event => {
+      target[name] = Number(event.target.value);
+      updateControls();
+      document.getElementById('phrase-status').textContent = 'Bilanciamento regolato a mano.';
     });
+  });
+  document.getElementById('phrase').addEventListener('input', event => {
+    Object.assign(target, parametersFromText(event.target.value));
+    updateControls();
+    document.getElementById('phrase-status').textContent = event.target.value
+      ? 'Ogni lettera modifica il bilanciamento. La traccia rimane.'
+      : 'Parametri iniziali ripristinati. La traccia rimane.';
   });
   document.getElementById('reset').addEventListener('click', resetDrawing);
   document.getElementById('export').addEventListener('click', () => {
