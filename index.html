@@ -3,36 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#111211">
-  <title>Memoria oscillante</title>
+  <meta name="theme-color" content="#121713">
+  <title>CELLULAR GARDEN</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="style.css">
-  <script defer src="vendor/p5.min.js"></script>
-  <script defer src="sketch.js"></script>
+  <script src="app.js" defer></script>
 </head>
 <body>
-  <header class="masthead"><a class="identity" href="./">MO<span>STUDIO DI OSCILLAZIONI</span></a><span class="edition">ESPERIMENTO N° 01 / HARMONOGRAPH</span></header>
+  <header><span class="mark">CG<span>STUDI DI VITA CELLULARE</span></span><span class="edition">AUTOMA CELLULARE / 01</span></header>
   <main>
-    <div class="heading"><p class="eyebrow">DUE OSCILLAZIONI. UNA TRACCIA.</p><h1>Memoria <em>oscillante</em><span>.</span></h1><p class="intro">Un equilibrio di frequenze, fase e tempo.<br>Ogni movimento lascia una memoria.</p></div>
+    <div class="heading"><p class="eyebrow">PICCOLI GESTI. SISTEMI VIVENTI.</p><h1>CELLULAR <em>GARDEN</em><span>.</span></h1></div>
     <div class="workspace">
-      <section class="drawing" aria-label="Disegno armonografico"><div class="canvas-top"><span><i></i> TRACCIA IN EVOLUZIONE</span><span>800 × 800 PX</span></div><div id="canvas-host"></div><div class="canvas-bottom"><span>X ↔ Y / OSCILLAZIONI SMORZATE</span><span>IL TEMPO DISEGNA.</span></div></section>
-      <aside aria-label="Parametri della traiettoria">
-        <div class="panel-title"><span>Parole in movimento</span><span class="index">01—08</span></div>
-        <div class="word-control"><label for="phrase">Una parola, una frase</label><input id="phrase" type="text" maxlength="240" placeholder="Scrivi qualcosa…" autocomplete="off" spellcheck="false"><p id="phrase-status" role="status">Ogni lettera bilancia gli otto parametri.</p></div>
-        <div class="parameter-grid"><div class="control"><label for="frequencyX"><span class="number">01</span>Frequenza X</label><output for="frequencyX" id="frequencyX-value">0.320 Hz</output><input id="frequencyX" type="range" min="0.1" max="0.8" step="0.001" value="0.32"></div>
-<div class="control"><label for="frequencyY"><span class="number">02</span>Frequenza Y</label><output for="frequencyY" id="frequencyY-value">0.481 Hz</output><input id="frequencyY" type="range" min="0.1" max="1.2" step="0.001" value="0.481"></div>
-<div class="control"><label for="amplitudeX"><span class="number">03</span>Ampiezza X</label><output for="amplitudeX" id="amplitudeX-value">1.000</output><input id="amplitudeX" type="range" min="0.2" max="1" step="0.001" value="1"></div>
-<div class="control"><label for="amplitudeY"><span class="number">04</span>Ampiezza Y</label><output for="amplitudeY" id="amplitudeY-value">1.000</output><input id="amplitudeY" type="range" min="0.2" max="1" step="0.001" value="1"></div>
-<div class="control"><label for="phaseX"><span class="number">05</span>Fase X</label><output for="phaseX" id="phaseX-value">0°</output><input id="phaseX" type="range" min="0" max="360" step="1" value="0"></div>
-<div class="control"><label for="phaseY"><span class="number">06</span>Fase Y</label><output for="phaseY" id="phaseY-value">90°</output><input id="phaseY" type="range" min="0" max="360" step="1" value="90"></div>
-<div class="control"><label for="dampingX"><span class="number">07</span>Smorzamento X</label><output for="dampingX" id="dampingX-value">0.008</output><input id="dampingX" type="range" min="0" max="0.04" step="0.001" value="0.008"></div>
-<div class="control"><label for="dampingY"><span class="number">08</span>Smorzamento Y</label><output for="dampingY" id="dampingY-value">0.008</output><input id="dampingY" type="range" min="0" max="0.04" step="0.001" value="0.008"></div>
-</div>
-        <div class="actions"><button id="export" type="button">Esporta PNG <span aria-hidden="true">↗</span></button><button id="reset" type="button">Reset <span aria-hidden="true">↺</span></button></div>
-        <p class="note">Testo e cursori cambiano il futuro della linea.<br>Reset riparte con i parametri attuali.</p>
-      </aside>
+      <section class="garden" aria-label="Giardino cellulare"><div class="canvas-caption"><span id="status">IN EVOLUZIONE</span><span>120 × 120 CELLULE</span></div><canvas id="garden" width="720" height="720" aria-label="Griglia cellulare: clicca e trascina per seminare"></canvas><p class="canvas-foot">SEMINA. OSSERVA. RICOMINCIA.</p></section>
+      <aside><p class="eyebrow">COLTIVA UN EQUILIBRIO</p><h2>La vita nasce<br>da un tocco.</h2><p class="instructions">Clicca e trascina sul quadrato per seminare cellule. Un piccolo gesto può diventare un giardino.</p><div class="rule"><span>01 / SEMINA</span><p>Pennello circolare, raggio 3 cellule.</p></div><div class="rule"><span>02 / OSSERVA</span><p>Con 2 o 3 vicini una cellula sopravvive. Con esattamente 3, una nuova cellula nasce.</p></div><div class="legend"><span><i class="sage"></i> SOPRAVVIVENZA</span><span><i class="ochre"></i> NASCITA</span></div><div class="actions"><button id="play" type="button" aria-pressed="true">Pausa <span aria-hidden="true">Ⅱ</span></button><button id="reset" type="button">Reset <span aria-hidden="true">↺</span></button><button id="export" type="button">Esporta PNG <span aria-hidden="true">↗</span></button></div><p class="note">Metti in pausa per seminare con calma.<br>Reset svuota il giardino.</p></aside>
     </div>
   </main>
-  <footer><span>MEMORIA OSCILLANTE</span><span>MATEMATICA CHE LASCIA IL SEGNO.</span><span>CANVAS 2D / P5.JS</span></footer>
+  <footer><span>CELLULAR GARDEN</span><span>REGOLE SEMPLICI, FORME INATTESE.</span><span>CANVAS 2D</span></footer>
 </body>
 </html>
